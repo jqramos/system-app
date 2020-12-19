@@ -1,6 +1,6 @@
 import {IArt} from "@entities/Art";
 import {Observable} from "rxjs";
-import ArtRepository from "../repositories/ArtRepository";
+import ArtRepository from "../../repositories/ArtRepository";
 import Logger from 'jet-logger';
 import { Request, Response } from 'express';
 import {StatusCodes} from "http-status-codes";

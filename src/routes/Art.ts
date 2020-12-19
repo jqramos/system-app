@@ -1,6 +1,6 @@
 
 import {Application, Request, Response, Router} from 'express';
-import {ArtService} from "../services/Art.service";
+import {ArtService} from "../services/art/Art.service";
 import {body, validationResult} from 'express-validator';
 const router = Router();
 
