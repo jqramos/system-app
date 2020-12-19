@@ -10,4 +10,5 @@ export default class ArtRepository {
         const _session = new Art(params);
         _session.save(callback);
     }
+
 }

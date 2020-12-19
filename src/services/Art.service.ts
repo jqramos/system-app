@@ -13,10 +13,10 @@ export class ArtService {
     public create(req: Request, res: Response) {
         let art_params: IArt = {
             title: req.body.title,
-            name: req.body.name,
             date: new Date(),
             url: req.body.url,
             desc: req.body.desc,
+            category: req.body.category
         }
         this.artRepository.create(art_params, (err: any, data: IArt) => {
             if (err) {
@@ -42,5 +42,8 @@ export class ArtService {
             }
         });
     }
+
+
+
 
 }

@@ -1,11 +1,21 @@
 
 import {Application, Request, Response, Router} from 'express';
 import {ArtService} from "../services/Art.service";
+import {body, validationResult} from 'express-validator';
 const router = Router();
 
 const artService  = new ArtService();
 
-router.post('/', (req: Request, res: Response) => {
+router.post('/', [
+    body('title').not().isEmpty(),
+    body('desc').not().isEmpty(),
+    body('url').not().isEmpty(),
+    body('category').not().isEmpty()
+],(req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     return artService.create(req, res);
 });
 
