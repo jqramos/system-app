@@ -1,8 +1,7 @@
 import {IArt} from "@entities/Art";
-import {Observable} from "rxjs";
 import ArtRepository from "../../repositories/ArtRepository";
 import Logger from 'jet-logger';
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 import {StatusCodes} from "http-status-codes";
 
 const { BAD_REQUEST, CREATED, OK,  } = StatusCodes;
@@ -24,7 +23,7 @@ export class ArtService {
                 Logger.Err(res);
                 return res.status(OK).json(err);
             } else {
-                Logger.Info('get user successful' + data);
+                Logger.Info('get art successful' + data);
                 return res.status(OK).json(data);
             }
         });
@@ -37,7 +36,7 @@ export class ArtService {
                 Logger.Err(res);
                 return res.status(OK).json(err);
             } else {
-                Logger.Info('get user successful' + data);
+                Logger.Info('get art successful' + data);
                 return res.status(OK).json(data);
             }
         });

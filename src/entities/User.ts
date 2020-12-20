@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const { Schema } = mongoose;
 export enum Role {
     guest,
@@ -12,7 +13,7 @@ export interface IUser {
     email: String;
     role: String;
     createdDate: Date;
-    lastLogin: Date;
+    lastLogin: Date | undefined;
     is_deleted?: Boolean;
 }
 
