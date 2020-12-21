@@ -11,7 +11,6 @@ export class UserService {
 
     public registerUser(req: Request, res: Response) {
         let user: IUser = {
-            lastLogin: undefined,
             username: req.body.username,
             password: req.body.password,
             email: req.body.email,
