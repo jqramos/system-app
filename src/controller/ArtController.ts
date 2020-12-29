@@ -7,11 +7,7 @@ const artService = new ArtService();
 
 class ArtController {
 
-    public static create(req: Request, res: Response): any {       
-        body('title').not().isEmpty();
-        body('desc').not().isEmpty();
-        body('url').not().isEmpty();
-        body('category').not().isEmpty();
+    public static create(req: Request, res: Response): any {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });

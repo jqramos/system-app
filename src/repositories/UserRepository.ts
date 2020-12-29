@@ -19,4 +19,8 @@ export default class UserRepository {
         User.findByIdAndUpdate(id, user, callback);
     }
 
+    public findByCreds(username: string, callback: any) {
+        return User.findOne({username}, callback);
+    }
+
 }
