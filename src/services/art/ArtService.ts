@@ -29,6 +29,26 @@ export class ArtService {
         });
     }
 
+    public update(req: Request, res: Response) {
+        let art_params: IArt = {
+            title: req.body.title,
+            date: new Date(),
+            url: req.body.url,
+            desc: req.body.desc,
+            category: req.body.category
+        }
+        this.artRepository.update(req.params.id, art_params, (err: any, data: IArt) => {
+            if (err) {
+                Logger.Err(err);
+                Logger.Err(res);
+                return res.status(OK).json(err);
+            } else {
+                Logger.Info('update art successful' + data);
+                return res.status(OK);
+            }
+        });
+    }
+
     public findById(req: Request, res: Response) {
         this.artRepository.findById(req.params.id, (err: any, data: IArt) => {
             if (err) {
@@ -42,7 +62,18 @@ export class ArtService {
         });
     }
 
-
+    public delete(req: Request, res: Response) {
+        this.artRepository.delete(req.params.id, (err: any, data: IArt) => {
+            if (err) {
+                Logger.Err(err);
+                Logger.Err(res);
+                return res.status(OK).json(err);
+            } else {
+                Logger.Info('delete art successful' + data);
+                return res.status(OK);
+            }
+        });
+    }
 
 
 }

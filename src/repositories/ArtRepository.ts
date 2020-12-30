@@ -11,4 +11,12 @@ export default class ArtRepository {
         _session.save(callback);
     }
 
+    public update(id: string, params: IArt, callback: any) {
+        Art.findByIdAndUpdate(id, params, callback)
+    }
+
+    public delete(id: string, callback: any) {
+        Art.findByIdAndDelete(id, callback)
+    }
+
 }

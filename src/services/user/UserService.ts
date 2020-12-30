@@ -5,10 +5,14 @@ import {StatusCodes} from "http-status-codes";
 import {IUser} from "@entities/User";
 import {Observable} from "rxjs";
 import * as jwt from "jsonwebtoken";
+import 'dotenv/config';
 
 const { BAD_REQUEST, CREATED, OK,  } = StatusCodes;
 
 const accessTokenSecret = `${process.env.ACCESS_TOKEN}`;
+const accessTokenLife = `${process.env.ACCESS_TOKEN_LIFE}`;
+const refreshTokenSecret = `${process.env.REFRESH_TOKEN}`;
+const refreshTokenLife = `${process.env.REFRESH_TOKEN_LIFE}`;
 export class UserService {
     private userRepository: UserRepository = new UserRepository();
 
@@ -44,15 +48,31 @@ export class UserService {
                     if (!isMatch) {
                         return res.status(OK).json('Username or password incorrect');
                     }
+                    const userService = new UserService();
                     if (data) {
-                        // Generate an access token
-                        const accessToken = jwt.sign({ username: data.username,  role: data.role }, accessTokenSecret);
-                        res.json({
-                            accessToken
-                        });
+                        return userService.generateToken(req, res, data);
                     }
                 });
             }
         })
+    }
+
+    public generateToken(req: Request, res: Response, data: any): any {
+        // Generate an access token
+        const accessToken = jwt.sign({ username: data.username,  role: data.role },
+            accessTokenSecret, {
+                algorithm: "HS256",
+                expiresIn: accessTokenLife
+            });
+        let refreshToken = jwt.sign({ username: data.username,  role: data.role },
+            refreshTokenSecret, {
+                algorithm: "HS256",
+                expiresIn: refreshTokenLife
+            })
+        res.json({
+            accessToken,
+            refreshToken
+        });
+        res.send();
     }
 }

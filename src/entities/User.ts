@@ -6,8 +6,8 @@ import * as bcrypt from "bcrypt";
 const SALT_WORK_FACTOR = 10;
 const { Schema } = mongoose;
 export enum Role {
-    guest,
-    admin
+    guest = "guest",
+    admin = "admin"
 }
 
 export interface IUser {
