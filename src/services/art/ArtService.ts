@@ -4,13 +4,20 @@ import Logger from 'jet-logger';
 import {Request, Response} from 'express';
 import {StatusCodes} from "http-status-codes";
 import {PaginateModel} from "mongoose";
+import {removeTmpFile} from "@shared/utility";
+import {Storage} from "@google-cloud/storage";
+import * as fs from "fs";
 
 const { BAD_REQUEST, CREATED, OK,  } = StatusCodes;
+const storage = new Storage({
+    projectId: `${process.env.PROJECT_ID}`,
+    keyFilename: `${process.env.KEY_PATH}`
+});
 
 export class ArtService {
     private artRepository: ArtRepository = new ArtRepository();
 
-    public create(req: Request, res: Response) {
+    public async create(req: Request, res: Response) {
         let art_params: IArt = {
             title: req.body.title,
             date: new Date(),
@@ -18,7 +25,21 @@ export class ArtService {
             desc: req.body.desc,
             category: req.body.category
         }
+        try {
+            const results =  await storage.bucket(`${process.env.BUCKET}`).upload(req.file.path, {
+                gzip: true,
+                metadata: {
+                    cacheControl: 'public, max-age=31536000'
+                },
+                destination: `${process.env.BUCKET_DIR}/${req.file.filename}`
+            });
+            console.log(results);
+        } catch (err) {
+            console.error('ERROR:', err);
+            return res.status(400).json(err);
+        }
         this.artRepository.create(art_params, (err: any, data: IArt) => {
+            removeTmpFile(req.file.path);
             if (err) {
                 Logger.Err(err);
                 Logger.Err(res);
@@ -94,6 +115,10 @@ export class ArtService {
                 return res.status(OK).json(data);
             }
         });
+    }
+
+    public uploadFile() {
+
     }
 
 }
