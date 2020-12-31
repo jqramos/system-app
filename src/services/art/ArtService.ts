@@ -3,6 +3,7 @@ import ArtRepository from "../../repositories/ArtRepository";
 import Logger from 'jet-logger';
 import {Request, Response} from 'express';
 import {StatusCodes} from "http-status-codes";
+import {PaginateModel} from "mongoose";
 
 const { BAD_REQUEST, CREATED, OK,  } = StatusCodes;
 
@@ -75,5 +76,24 @@ export class ArtService {
         });
     }
 
+    public search(req: Request, res: Response) {
+        const options = {
+            page: req.query.page ? req.query.page : 1,
+            limit: 9,
+            sort: {date: '-1'},
+            collation: {
+                locale: 'en',
+            },
+        };
+        this.artRepository.search({}, options,(err: any, data: PaginateModel<any>) => {
+            if (err) {
+                Logger.Err(err);
+                Logger.Err(res);
+                return res.status(OK).json(err);
+            } else {
+                return res.status(OK).json(data);
+            }
+        });
+    }
 
 }

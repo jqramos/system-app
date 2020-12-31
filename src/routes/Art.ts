@@ -1,5 +1,5 @@
-import {NextFunction, Request, Response, Router} from 'express';
-import {body, validationResult} from 'express-validator';
+import {Router} from 'express';
+import {body} from 'express-validator';
 import ArtController from 'src/controller/ArtController';
 import AuthController from "src/controller/AuthController";
 
@@ -16,6 +16,7 @@ router.post('/', [
 ], artController.create);
 
 router.get('/:id', artController.findById);
+router.post('/search', artController.search);
 
 router.delete('/:id',[
     authController.authenticateJWT

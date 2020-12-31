@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Utility from "@shared/utility";
+import Utility, {validateEmail} from "@shared/utility";
 import * as bcrypt from "bcrypt";
 
 
@@ -41,7 +41,7 @@ const schema  = new Schema({
         type: String,
         validate: {
             validator: function(v: any) {
-                return Utility.validateEmail(v);
+                return validateEmail(v);
             },
             message: props => `${props.value} is not a valid email!`
         },

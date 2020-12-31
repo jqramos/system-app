@@ -19,4 +19,7 @@ export default class ArtRepository {
         Art.findByIdAndDelete(id, callback)
     }
 
+    public search(query: any, options: any, callback: any) {
+        Art.paginate(query, options, callback);
+    }
 }

@@ -1,9 +1,8 @@
 
 import {Request, Response} from 'express';
-import {body, validationResult} from 'express-validator';
+import {validationResult} from 'express-validator';
 import { ArtService } from 'src/services/art/ArtService';
-import {Role} from "@entities/User";
-import Utility from "@shared/utility";
+import {isAdmin} from "@shared/utility";
 
 const artService = new ArtService();
 
@@ -11,7 +10,7 @@ class ArtController {
 
     public create(req: Request, res: Response): any {
         const errors = validationResult(req);
-        if (!Utility.isAdmin(req.body.user.role)) {
+        if (!isAdmin(req.body.user.role)) {
             return res.status(401).json({errors: "Unauthorized"});
         }
         if (!errors.isEmpty()) {
@@ -22,7 +21,7 @@ class ArtController {
 
     public update(req: Request, res: Response): any {
         const errors = validationResult(req);
-        if (!Utility.isAdmin(req.body.user.role)) {
+        if (!isAdmin(req.body.user.role)) {
             return res.status(401).json({errors: "Unauthorized"});
         }
         if (!errors.isEmpty()) {
@@ -33,7 +32,7 @@ class ArtController {
 
     public delete(req: Request, res: Response): any {
         const errors = validationResult(req);
-        if (!Utility.isAdmin(req.body.user.role)) {
+        if (!isAdmin(req.body.user.role)) {
             return res.status(401).json({errors: "Unauthorized"});
         }
         if (!errors.isEmpty()) {
@@ -43,7 +42,7 @@ class ArtController {
     }
 
     public search(req: Request, res: Response): any {
-
+        return artService.search(req, res);
     }
     
     public findById(req: Request, res: Response): any {

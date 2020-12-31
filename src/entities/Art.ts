@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
+import mongoosePaginate from "mongoose-paginate-v2";
 
 
 export enum Category {
@@ -35,7 +36,7 @@ const schema  = new Schema({
         required: true
     }
 });
-
+schema.plugin(mongoosePaginate);
 const Art = mongoose.model('Art', schema );
 
 export default Art;
