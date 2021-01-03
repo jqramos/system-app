@@ -10,10 +10,10 @@ class ArtController {
 
     public create(req: Request, res: Response): any {
         const errors = validationResult(req);
-        // if (!isAdmin(req.body.user.role)) {
-        //     removeTmpFile(req.file.path);
-        //     return res.status(401).json({errors: "Unauthorized"});
-        // }
+        if (!isAdmin(req.body.user.role)) {
+            removeTmpFile(req.file.path);
+            return res.status(401).json({errors: "Unauthorized"});
+        }
         if (!errors.isEmpty()) {
             removeTmpFile(req.file.path);
             return res.status(400).json({ errors: errors.array() });

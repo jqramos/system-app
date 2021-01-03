@@ -20,6 +20,10 @@ export interface IArt {
     category: Category;
 }
 
+export interface IArtCreate extends IArt {
+    name: string;
+}
+
 export interface IArtDoc extends IArt {
     getCategory(): string;
 }
@@ -29,6 +33,7 @@ const schema  = new Schema({
     date: { type: Date, default: Date.now },
     url: String,
     desc: String,
+    name: String,
     category: {
         type: String,
         enum: ['ORIGINAL', 'FANART', 'COMMISSIONED'],

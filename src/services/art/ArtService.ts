@@ -1,4 +1,4 @@
-import {IArt} from "@entities/Art";
+import {IArt, IArtCreate, IArtDoc} from "@entities/Art";
 import ArtRepository from "../../repositories/ArtRepository";
 import Logger from 'jet-logger';
 import {Request, Response} from 'express';
@@ -18,11 +18,12 @@ export class ArtService {
     private artRepository: ArtRepository = new ArtRepository();
 
     public async create(req: Request, res: Response) {
-        let art_params: IArt = {
+        let art_params: IArtCreate = {
             title: req.body.title,
             date: new Date(),
             url: req.body.url,
             desc: req.body.desc,
+            name: req.file.filename,
             category: req.body.category
         }
         try {
@@ -33,7 +34,7 @@ export class ArtService {
                 },
                 destination: `${process.env.BUCKET_DIR}/${req.file.filename}`
             });
-            console.log(results);
+            art_params.url = `${process.env.STORAGE_API}/${process.env.BUCKET}/${results[0].name}`;
         } catch (err) {
             console.error('ERROR:', err);
             return res.status(400).json(err);
@@ -85,14 +86,21 @@ export class ArtService {
     }
 
     public delete(req: Request, res: Response) {
-        this.artRepository.delete(req.params.id, (err: any, data: IArt) => {
+        this.artRepository.delete(req.params.id, async (err: any, data: IArtCreate) => {
             if (err) {
                 Logger.Err(err);
                 Logger.Err(res);
                 return res.status(OK).json(err);
             } else {
                 Logger.Info('delete art successful' + data);
-                return res.status(OK);
+                try {
+                    await storage.bucket(`${process.env.BUCKET}`).file(`${process.env.BUCKET_DIR}/${data.name}`).delete();
+                    console.log(`gs://${process.env.BUCKET}/${process.env.BUCKET_DIR}/${data.name} deleted.`);
+                    res.send(200).json({ msg: "DELETED SUCCESSFULLY"});
+                } catch (err) {
+                    console.error('ERROR:', err);
+                    return res.status(400).json(err);
+                }
             }
         });
     }
